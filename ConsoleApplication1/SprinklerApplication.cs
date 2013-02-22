@@ -34,7 +34,7 @@ namespace ConsoleApplication1
                             stationTask = Task.Factory.StartNew(() =>
                                 {
                                     Console.WriteLine("Station {0} turned on.", station_id);
-                                    ScheduledJob(DateTime.Now.AddSeconds(1));
+                                    ScheduledJob(DateTime.Now.AddSeconds(1), station_id);
                                 }, tokenSource.Token);
 
 
@@ -63,12 +63,9 @@ namespace ConsoleApplication1
         public bool Stop()
         {
             if (stationTask == null || stationTask.Status != TaskStatus.Running)
-            {
                 return false;
-            }
 
             tokenSource.Cancel();
-
             return true;
         }
 
@@ -76,7 +73,7 @@ namespace ConsoleApplication1
         /// Blocking loop that shuts off station on complete
         /// </summary>
         /// <param name="runTime"></param>
-        private static void ScheduledJob(DateTime? runTime)
+        private static void ScheduledJob(DateTime? runTime, int stationId)
         {
             // if runtime is null, default to the optimal 7 minutes
             runTime = runTime ?? DateTime.Now.AddMinutes(7);
@@ -85,14 +82,13 @@ namespace ConsoleApplication1
             {
                 if (DateTime.Now > runTime)
                 {
-                    Console.WriteLine("\nSprinkle job completed");
+                    Console.WriteLine("\nSprinkle job for station {0} completed", stationId);
                     // todo: turn off station and continue
 
                     break;
                 }
 
-                Console.Write(". "); // this is sound sprinkler make
-
+                Console.Write(".");
                 Thread.Sleep(100);
             }
         }
