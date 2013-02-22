@@ -11,8 +11,9 @@ namespace ConsoleApplication1
             app.Start(5);
 
             Thread.Sleep(1000);
-            app.Stop(); // wait 3 seconds and shut em all off
+            app.Stop(); // wait 1 seconds and shut em all off
 
+            Console.WriteLine("Sprinkler application complete");
             Console.ReadLine();
         }
     }

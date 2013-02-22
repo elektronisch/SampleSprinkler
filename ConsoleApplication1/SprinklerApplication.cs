@@ -19,6 +19,9 @@ namespace ConsoleApplication1
 
         public void Start(int numberOfStations)
         {
+            if (IsRunning())
+                return;
+
             // don't block main thread so spin up thread for job
             Task.Factory.StartNew(() =>
                 {
@@ -31,7 +34,7 @@ namespace ConsoleApplication1
                             stationTask = Task.Factory.StartNew(() =>
                                 {
                                     Console.WriteLine("Station {0} turned on.", station_id);
-                                    ScheduledJob(DateTime.Now.AddSeconds(2));
+                                    ScheduledJob(DateTime.Now.AddSeconds(1));
                                 }, tokenSource.Token);
 
 
@@ -40,7 +43,7 @@ namespace ConsoleApplication1
                     }
                     catch (AggregateException)
                     {
-                        Console.WriteLine("Sprinkler job canceled.. shutting them all off.");
+                        Console.WriteLine("Application stopped.");
                     }
                 });
         }
@@ -57,13 +60,16 @@ namespace ConsoleApplication1
         /// <summary>
         /// Terminates any running job
         /// </summary>
-        public void Stop()
+        public bool Stop()
         {
-            if (stationTask.Status != TaskStatus.Running) 
-                return;
+            if (stationTask == null || stationTask.Status != TaskStatus.Running)
+            {
+                return false;
+            }
 
             tokenSource.Cancel();
-            Console.WriteLine("Hello");
+
+            return true;
         }
 
         /// <summary>
@@ -85,7 +91,7 @@ namespace ConsoleApplication1
                     break;
                 }
 
-                Console.Write("psh. "); // this is sound sprinkler make
+                Console.Write(". "); // this is sound sprinkler make
 
                 Thread.Sleep(100);
             }
