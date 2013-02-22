@@ -54,7 +54,7 @@ namespace ConsoleApplication1
         /// <returns></returns>
         public bool IsRunning()
         {
-            return stationTask.Status == TaskStatus.Running;
+            return stationTask != null && stationTask.Status == TaskStatus.Running;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace ConsoleApplication1
         /// </summary>
         public bool Stop()
         {
-            if (stationTask == null || stationTask.Status != TaskStatus.Running)
+            if (!IsRunning())
                 return false;
 
             tokenSource.Cancel();
