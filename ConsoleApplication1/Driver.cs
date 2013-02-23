@@ -10,7 +10,8 @@ namespace OpenSprinkler.Driver
         private Task _stationTask;
         private readonly CancellationTokenSource _tokenSource;
         private readonly int _numberOfStations;
-        
+        private volatile Boolean _isStarted = false;
+
 
         public SprinklerDriver(int numberOfStations)
         {
@@ -21,8 +22,10 @@ namespace OpenSprinkler.Driver
 
         public void Start(IEnumerable<int> stations)
         {
-            if (IsRunning())
+            if (IsRunning() || _isStarted)
                 return;
+
+            _isStarted = true;
 
             // don't block main thread so spin up thread for job
             Task.Factory.StartNew(() =>
@@ -37,15 +40,15 @@ namespace OpenSprinkler.Driver
                             {
                                 Console.WriteLine("Station {0} turned on.", station_id);
                                 ScheduledJob(DateTime.Now.AddSeconds(2));
-                            }, 
+                            },
                             _tokenSource.Token);
 
-                        
+
                         _stationTask.Wait(); // operate stations in parallel
 
                         if (!_tokenSource.IsCancellationRequested)
                         {
-                            Console.WriteLine("Wtf..");
+                            Console.WriteLine("Waiting for the sprinkler value to rotate (5s)");
 
                             // optional: 8 second delay to allow the sprinkler valve to rotate
                             Thread.Sleep(5000);
@@ -55,6 +58,10 @@ namespace OpenSprinkler.Driver
                 catch (AggregateException)
                 {
                     Console.WriteLine("Sprinkler job canceled.. shutting them all off.");
+                }
+                finally
+                {
+                    _isStarted = false;
                 }
             });
         }

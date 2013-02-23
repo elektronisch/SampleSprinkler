@@ -10,9 +10,11 @@ namespace OpenSprinkler.Driver
             var app = new SprinklerDriver(5);
             app.Start(new int[] { 0, 1, 2, 3, 4 });
 
-            Thread.Sleep(500);
+            app.Start(new int[] { 0, 1, 2, 3, 4 });
 
-            app.Stop(); // wait 3 seconds and shut em all off
+            Thread.Sleep(30000);
+
+            app.Stop(); // wait 10 seconds and shut em all off
 
             Console.ReadLine();
         }
