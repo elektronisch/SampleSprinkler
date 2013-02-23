@@ -9,7 +9,7 @@ namespace OpenSprinkler.Test
         static void Main(string[] args)
         {
             var app = new SprinklerDriver(5);
-            app.Start(new[] { 0, 1, 2, 3, 4 });
+            app.Start(new[] { 1, 2, 3, 4, 5 });
 
             //Thread.Sleep(10000);
 
