@@ -7,8 +7,8 @@
     <ProjectGuid>{5B1D936F-3C65-460D-92F6-E9027681A972}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenSprinkler.Driver</RootNamespace>
-    <AssemblyName>OpenSprinkler.Driver</AssemblyName>
+    <RootNamespace>OpenSprinkler.Test</RootNamespace>
+    <AssemblyName>OpenSprinkler.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,12 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Driver.cs" />
-    <Compile Include="TestProgram.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Visual Studio 2012\Projects\Sprinkle.Sharp.WCF.Service\Sprinkler.Sharp.Manager\OpenSprinkler.Manager.csproj">
+      <Project>{7627394a-16c1-4620-8407-074d0980f715}</Project>
+      <Name>OpenSprinkler.Manager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

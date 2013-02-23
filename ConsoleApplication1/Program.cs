@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
+using OpenSprinkler.Manager;
 
 namespace OpenSprinkler.Driver
 {
-    class TestProgram
+    class Program
     {
         static void Main(string[] args)
         {
