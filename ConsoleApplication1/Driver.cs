@@ -9,14 +9,15 @@ namespace OpenSprinkler.Driver
     {
         private Task _stationTask;
         private readonly CancellationTokenSource _tokenSource;
-        private readonly int _numberOfStations;
+        
         private volatile Boolean _isStarted = false;
+        private readonly Boolean[] _stationBits;
 
 
         public SprinklerDriver(int numberOfStations)
         {
             this._tokenSource = new CancellationTokenSource();
-            this._numberOfStations = numberOfStations;
+            _stationBits = new Boolean[numberOfStations];
         }
 
 
@@ -27,12 +28,14 @@ namespace OpenSprinkler.Driver
 
             _isStarted = true;
 
+            ShiftStations(false);
+
             // don't block main thread so spin up thread for job
             Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    for (var i = 0; i < _numberOfStations; i++)
+                    for (var i = 0; i < _stationBits.Length; i++)
                     {
                         int station_id = i; // closure
 
@@ -62,6 +65,9 @@ namespace OpenSprinkler.Driver
                 finally
                 {
                     _isStarted = false;
+                    Console.WriteLine("All completed.");
+                    
+                    ShiftStations(false);
                 }
             });
         }
@@ -115,6 +121,18 @@ namespace OpenSprinkler.Driver
                 Console.Write(".");
 
                 Thread.Sleep(50);
+            }
+        }
+
+        /// <summary>
+        /// Shifts all of the bits from 0/1
+        /// </summary>
+        /// <param name="position"></param>
+        private void ShiftStations(bool position = false)
+        {
+            for (var i = 0; i < _stationBits.Length; i++)
+            {
+                _stationBits[i] = position;
             }
         }
     }
